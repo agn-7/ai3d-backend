@@ -1,16 +1,20 @@
-import g4f
 import traceback
 
 from .schemas import Interaction
+from .config import settings
 
-g4f.debug.logging = True
-g4f.check_version = False
+from openai import AsyncOpenAI
+from openai.types.chat.chat_completion import ChatCompletion
+
+client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
 
-async def generate_ai_response(content: str, interaction: Interaction) -> str:
+async def generate_ai_response(
+    content: str, interaction: Interaction
+) -> ChatCompletion:
     try:
-        response = await g4f.ChatCompletion.create_async(
-            model=g4f.ModelUtils.convert[interaction.settings.model],
+        response = await client.chat.completions.create(
+            model=interaction.settings.model,
             messages=[
                 {"role": "system", "content": interaction.settings.prompt},
                 {"role": "user", "content": content},

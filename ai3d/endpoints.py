@@ -45,12 +45,12 @@ async def get_interactions(
 
 @router.post("/interactions", response_model=schemas.Interaction)
 async def create_interactions(
-    prompt: schemas.Prompt,
+    instruction: schemas.Instruction,
     chat_model: schemas.ChatModel = Depends(),
     db: AsyncSession = Depends(get_db),
 ) -> schemas.Interaction:
     settings = schemas.Settings(
-        model=chat_model.model, prompt=prompt.prompt, role=prompt.role
+        model=chat_model.model, prompt=instruction.prompt, role=instruction.role
     )
     interaction = await crud.create_interaction(db=db, settings=settings)
 
@@ -117,11 +117,13 @@ async def create_message(
 
     messages = []
     if message.role == "human":
-        ai_content = await modules.generate_ai_response(
+        response = await modules.generate_ai_response(
             content=message.content,
             interaction=interaction,
         )
-        ai_message = schemas.MessageCreate(role="ai", content=ai_content)
+        ai_message = schemas.MessageCreate(
+            role="ai", content=response.choices[0].message.content
+        )
 
         messages.append(message)
         messages.append(ai_message)
