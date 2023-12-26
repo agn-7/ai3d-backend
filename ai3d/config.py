@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: Optional[str] = None
     POSTGRES_DB: Optional[str] = None
     SQLALCHEMY_DATABASE_URI: Union[Optional[PostgresDsn], Optional[str]] = None
+    OPENAI_API_KEY: Optional[str] = None
 
     @field_validator("SQLALCHEMY_DATABASE_URI", mode="before")
     @classmethod
