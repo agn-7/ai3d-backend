@@ -16,7 +16,7 @@ async def get_db() -> AsyncSession:
 
 @router.get("/", response_model=str)
 async def get_root(db: AsyncSession = Depends(get_db)) -> str:
-    return "Hello from IFSGuid!"
+    return "Hello from Ai3D!"
 
 
 @router.get("/interactions", response_model=List[schemas.Interaction])

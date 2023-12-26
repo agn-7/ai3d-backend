@@ -2,9 +2,9 @@ from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncEngine
 
-from ifsguid import models
-from ifsguid.main import app
-from ifsguid.endpoints import get_db
+from ai3d import models
+from ai3d.main import app
+from ai3d.endpoints import get_db
 
 DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 

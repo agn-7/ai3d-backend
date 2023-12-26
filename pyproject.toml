@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ifsguid"
+name = "ai3d"
 version = "0.1.0"
 description = ""
 authors = ["Benyamin <benyaminjmf@gmail.com>"]

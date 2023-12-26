@@ -1,6 +1,6 @@
 import pytest
 
-from ifsguid import models
+from ai3d import models
 from . import client
 
 
@@ -10,7 +10,7 @@ from . import client
 def test_get_root():
     response = client.client.get("/api")
     assert response.status_code == 200
-    assert response.json() == "Hello from IFSGuid!"
+    assert response.json() == "Hello from Ai3D!"
 
 
 @pytest.mark.asyncio

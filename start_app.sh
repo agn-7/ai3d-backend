@@ -14,4 +14,4 @@ cd "$(get_absolute_path "$0")" || exit 1
 [[ "${HOST:-}" ]] && host="${HOST}"
 [[ "${PORT:-}" ]] && port="${PORT}"
 poetry run alembic upgrade head
-poetry run uvicorn --host "${host}" --port "${port}" --reload ifsguid.main:app
+poetry run uvicorn --host "${host}" --port "${port}" --reload ai3d.main:app

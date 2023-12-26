@@ -1,6 +1,6 @@
 import pytest
 
-from ifsguid import crud, models, schemas
+from ai3d import crud, models, schemas
 from . import client
 
 

@@ -3,8 +3,8 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool, create_engine
 
 from alembic import context  # type: ignore
-from ifsguid.config import settings
-from ifsguid.models import Base
+from ai3d.config import settings
+from ai3d.models import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
