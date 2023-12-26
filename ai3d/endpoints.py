@@ -121,9 +121,7 @@ async def create_message(
             content=message.content,
             interaction=interaction,
         )
-        ai_message = schemas.MessageCreate(
-            role="ai", content=response.choices[0].message.content
-        )
+        ai_message = schemas.MessageCreate(role="ai", content=response)
 
         messages.append(message)
         messages.append(ai_message)
