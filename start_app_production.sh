@@ -14,4 +14,4 @@ cd "$(get_absolute_path "$0")" || exit 1
 [[ "${HOST:-}" ]] && host="${HOST}"
 [[ "${PORT:-}" ]] && port="${PORT}"
 poetry run alembic upgrade head
-poetry run gunicorn ai3d.main:app -k uvicorn.workers.UvicornWorker --bind "${host}:${port}" --workers 9
+poetry run gunicorn ai3d.main:app -k uvicorn.workers.UvicornWorker --bind "${host}:${port}" --workers 2

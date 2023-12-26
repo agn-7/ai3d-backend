@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     container_name: ai3d_nginx
     ports:
-      - "80:80"
+      - "81:80"
     volumes:
       - "./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf:ro"
       - "./nginx/static:/static:ro"
