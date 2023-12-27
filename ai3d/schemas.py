@@ -3,7 +3,7 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 from typing import List, Literal
 
-from g4f import _all_models
+from . import ALL_MODELS
 
 
 class MessageCreate(BaseModel):
@@ -21,7 +21,7 @@ class Message(MessageCreate):
 
 
 class ChatModel(BaseModel):
-    model: Literal[tuple(_all_models)] = "gpt-4"
+    model: Literal[ALL_MODELS] = "gpt-4"
 
 
 class Instruction(BaseModel):
