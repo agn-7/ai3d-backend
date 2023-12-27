@@ -18,6 +18,7 @@ gunicorn = "^21.2.0"
 fastapi = "^0.106.0"
 openai = "^1.6.1"
 g4f = "^0.1.9.6"
+google-generativeai = "^0.3.2"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.31.0"
