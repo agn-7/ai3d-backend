@@ -37,11 +37,13 @@ jobs:
           poetry run pytest -s
         env:
           SQLALCHEMY_DATABASE_URI: postgresql+asyncpg://ai3d_usr:root@localhost/ai3d_db
+          OPENAI_API_KEY: xxx
       - name:  Code Coverage
         run: |
           poetry run pytest --cov=./ai3d --cov-report=xml --cov-report=term-missing
         env:
           SQLALCHEMY_DATABASE_URI: postgresql+asyncpg://ai3d_usr:root@localhost/ai3d_db
+          OPENAI_API_KEY: xxx
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         env:
