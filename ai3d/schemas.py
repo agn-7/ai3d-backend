@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 from pydantic import BaseModel, ConfigDict
-from typing import List, Literal
+from typing import List, Literal, Union
 
 from . import ALL_MODELS
 
@@ -10,7 +10,7 @@ class MessageCreate(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     role: Literal["human", "ai"] = "human"
-    content: str
+    content: Union[str, dict]
 
 
 class Message(MessageCreate):
