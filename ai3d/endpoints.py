@@ -98,9 +98,7 @@ async def get_all_message_in_interaction(
     return [schemas.Message.model_validate(message) for message in messages]
 
 
-@router.post(
-    "/interactions/{interaction_id}/messages", response_model=List[schemas.Message]
-)
+@router.post("/interactions/{interaction_id}/messages", response_model=schemas.Message)
 async def create_message(
     interaction_id: UUID,
     message: schemas.MessageCreate,
@@ -129,4 +127,4 @@ async def create_message(
     messages = await crud.create_message(
         db=db, messages=messages, interaction_id=str(interaction_id)
     )
-    return [schemas.Message.model_validate(message) for message in messages]
+    return schemas.Message.model_validate(messages[1])
