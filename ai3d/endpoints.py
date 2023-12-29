@@ -109,15 +109,19 @@ async def create_message(
     interaction = schemas.Interaction.model_validate(interaction)
 
     messages = []
-    if message.role == "human":
+    if message.role == "user":
         response = await modules.generate_ai_response(
             content=message.content,
             interaction=interaction,
         )
-        ai_message = schemas.MessageCreate(role="ai", content=response)
+        ai_message = schemas.MessageCreate(role="assistant", content=response)
 
         messages.append(message)
         messages.append(ai_message)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Role must be user"
+        )
 
     messages = await crud.create_message(
         db=db, messages=messages, interaction_id=str(interaction_id)

@@ -9,7 +9,7 @@ from . import ALL_MODELS
 class MessageCreate(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    role: Literal["human", "ai"] = "human"
+    role: Literal["user", "assistant"] = "user"
     content: Union[str, dict]
 
 
