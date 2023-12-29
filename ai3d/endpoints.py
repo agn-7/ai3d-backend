@@ -111,6 +111,7 @@ async def create_message(
     messages = []
     if message.role == "user":
         response = await modules.generate_ai_response(
+            db=db,
             content=message.content,
             interaction=interaction,
         )
