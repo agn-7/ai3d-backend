@@ -4,14 +4,9 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from . import crud, schemas, modules
-from .database import async_session, AsyncSession
+from .database import AsyncSession, get_db
 
 router = APIRouter()
-
-
-async def get_db() -> AsyncSession:
-    async with async_session() as session:
-        yield session
 
 
 @router.get("/", response_model=str)
