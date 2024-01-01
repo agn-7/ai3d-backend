@@ -37,6 +37,6 @@ async def test_create_interaction(db):
     assert response.status_code == 200
     assert response.json()["settings"] == {
         "prompt": "something",
-        "model": "gpt-4",
+        "model": "gpt-4-1106-preview",
         "role": "system",
     }

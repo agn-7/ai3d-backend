@@ -21,7 +21,7 @@ class Message(MessageCreate):
 
 
 class ChatModel(BaseModel):
-    model: Literal[ALL_MODELS] = "gpt-4"
+    model: Literal[ALL_MODELS] = "gpt-4-1106-preview"
 
 
 class Instruction(BaseModel):
