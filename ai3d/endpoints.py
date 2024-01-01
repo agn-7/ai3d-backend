@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from . import crud, schemas, modules
+from . import crud, schemas, modules, utils
 from .database import AsyncSession, get_db
 
 router = APIRouter()
@@ -27,15 +27,18 @@ async def get_all_interactions(
     ]
 
 
-@router.get(
-    "/interactions/{id}", response_model=schemas.Interaction, include_in_schema=False
-)
+@router.get("/interactions/{id}", response_model=schemas.Interaction)
 async def get_interactions(
     id: UUID, db: AsyncSession = Depends(get_db)
 ) -> schemas.Interaction:
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="NotImplementedError"
-    )
+    interaction = await crud.get_interaction(db=db, id=str(id))
+
+    if not interaction:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Interaction not found"
+        )
+
+    return schemas.Interaction.model_validate(interaction)
 
 
 @router.post("/interactions", response_model=schemas.Interaction)
@@ -59,15 +62,26 @@ async def delete_interaction(id: UUID, db: AsyncSession = Depends(get_db)) -> No
     )
 
 
-@router.put(
-    "/interactions/{id}", response_model=schemas.Interaction, include_in_schema=False
-)
+@router.put("/interactions/{id}", response_model=schemas.Interaction)
 async def update_interaction(
-    id: UUID, settings: schemas.Settings, db: AsyncSession = Depends(get_db)
+    id: UUID,
+    instruction: schemas.Instruction,
+    chat_model: schemas.ChatModel = Depends(),
+    db: AsyncSession = Depends(get_db),
 ) -> schemas.Interaction:
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED, detail="NotImplementedError"
+    interaction = await crud.get_interaction(db=db, id=str(id))
+
+    if not interaction:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Interaction not found"
+        )
+
+    settings = schemas.Settings(
+        model=chat_model.model, prompt=instruction.prompt, role=instruction.role
     )
+    interaction = await crud.update_interaction(db=db, id=id, settings=settings)
+
+    return schemas.Interaction.model_validate(interaction)
 
 
 @router.get(
