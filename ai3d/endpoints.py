@@ -127,4 +127,7 @@ async def create_message(
     messages = await crud.create_message(
         db=db, messages=messages, interaction_id=str(interaction_id)
     )
+
+    messages[1].content = utils.jsonify(messages[1].content)
+
     return schemas.Message.model_validate(messages[1])

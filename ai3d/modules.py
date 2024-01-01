@@ -4,10 +4,11 @@ import google.generativeai as genai
 
 from openai import AsyncOpenAI
 from openai.types.chat.chat_completion import ChatCompletion
+from openai._types import NOT_GIVEN
 
 from .config import settings
 from .database import AsyncSession
-from . import OPENAI_MODELS, crud, schemas
+from . import OPENAI_MODELS, GPT_TURBO_MODELS, crud, schemas
 
 client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 genai.configure(api_key=settings.GEMINI_API_KEY)
@@ -19,7 +20,14 @@ g4f.check_version = False
 async def openai_response(
     model: schemas.ChatModel, messages: list[schemas.MessageCreate]
 ) -> ChatCompletion:
-    response = await client.chat.completions.create(model=model, messages=messages)
+    if model in GPT_TURBO_MODELS:
+        response_format = {"type": "json_object"}
+    else:
+        response_format = NOT_GIVEN
+
+    response = await client.chat.completions.create(
+        model=model, messages=messages, response_format=response_format
+    )
 
     return response
 

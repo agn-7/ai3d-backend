@@ -18,3 +18,4 @@ OPENAI_MODELS = [
 ]
 GEMINI_MODELS = ["gemini-pro"]
 ALL_MODELS = tuple(set(_all_models + OPENAI_MODELS + GEMINI_MODELS))
+GPT_TURBO_MODELS = ("gpt-4-1106-preview", "gpt-3.5-turbo-1106")

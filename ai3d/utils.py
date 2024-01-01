@@ -1,4 +1,5 @@
 import pytz
+import json
 
 from datetime import datetime
 
@@ -30,3 +31,24 @@ def datetime_now() -> datetime:
         The current datetime object
     """
     return convert_timezone(datetime.now())
+
+
+def jsonify(response: str) -> dict | str:
+    """Converts a string response to a dict
+
+    Parameters
+    ----------
+    response : str
+        The response to convert
+
+    Returns
+    -------
+    dict
+        The converted response
+    """
+    try:
+        response = json.loads(response)
+    except json.decoder.JSONDecodeError:
+        pass
+    finally:
+        return response
