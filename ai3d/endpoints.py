@@ -79,7 +79,12 @@ async def update_interaction(
     settings = schemas.Settings(
         model=chat_model.model, prompt=instruction.prompt, role=instruction.role
     )
-    interaction = await crud.update_interaction(db=db, id=id, settings=settings)
+    interaction = await crud.update_interaction(db=db, id=str(id), settings=settings)
+
+    if not interaction:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Interaction not found"
+        )
 
     return schemas.Interaction.model_validate(interaction)
 

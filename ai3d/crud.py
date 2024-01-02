@@ -54,18 +54,17 @@ async def delete_interaction(db: AsyncSession, id: UUID) -> None:
 async def update_interaction(
     db: AsyncSession, id: UUID, settings: schemas.Settings
 ) -> models.Interaction:
-    stmt = (
-        update(models.Interaction)
-        .where(models.Interaction.id == id)
-        .values(settings=settings)
-    )
-    result = await db.execute(stmt)
+    interaction = await get_interaction(db=db, id=id)
 
-    if result.rowcount:
-        await db.commit()
-        return True
+    if interaction is None:
+        return None
 
-    return None
+    interaction.settings = settings.model_dump()
+
+    await db.commit()
+    await db.refresh(interaction)
+
+    return interaction
 
 
 async def get_messages(
