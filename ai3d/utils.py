@@ -2,6 +2,7 @@ import pytz
 import json
 
 from datetime import datetime
+from uuid import UUID
 
 
 def convert_timezone(dt: datetime, tz: str = "Europe/Berlin") -> datetime:
@@ -52,3 +53,51 @@ def jsonify(response: str) -> dict | str:
         pass
     finally:
         return response
+
+
+def flatten_messages(messages: list[str]) -> str:
+    """Flattens a list of messages to a single string
+
+    Parameters
+    ----------
+    messages : list[str]
+        The messages to flatten
+
+    Returns
+    -------
+    str
+        The flattened messages
+    """
+    return "\n\n".join(messages)
+
+
+async def uuid_to_str(id: UUID) -> str:
+    """Converts a UUID to a string
+
+    Parameters
+    ----------
+    id : UUID
+        The UUID to convert
+
+    Returns
+    -------
+    str
+        The converted UUID
+    """
+    return str(id)
+
+
+async def interaction_id_to_str(interaction_id: UUID) -> str:
+    """Converts a UUID to a string
+
+    Parameters
+    ----------
+    interaction_id : UUID
+        The UUID to convert
+
+    Returns
+    -------
+    str
+        The converted UUID
+    """
+    return str(interaction_id)
