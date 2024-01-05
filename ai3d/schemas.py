@@ -47,6 +47,16 @@ class Interaction(InteractionCreate):
     updated_at: datetime
     messages: List[Message] = []
 
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None
+
+
 class User(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
