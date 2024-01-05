@@ -15,12 +15,13 @@ pydantic-settings = "^2.1.0"
 pytz = "^2023.3.post1"
 asyncpg = "^0.29.0"
 gunicorn = "^21.2.0"
-fastapi = "^0.106.0"
+fastapi = "^0.108.0"
 openai = "^1.6.1"
 g4f = "^0.1.9.6"
 google-generativeai = "^0.3.2"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.6"
 
 [tool.poetry.group.dev.dependencies]
 requests = "^2.31.0"
