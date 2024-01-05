@@ -6,7 +6,7 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from . import models, schemas
+from . import models, schemas, utils
 
 
 async def get_interactions(
@@ -96,3 +96,27 @@ async def create_message(
 
     await db.commit()
     return messages_db
+
+
+async def get_user(db: AsyncSession, username: str) -> models.User:
+    stmt = select(models.User).where(models.User.username == username)
+    result = await db.execute(stmt)
+    return result.scalar()
+
+
+async def get_user_by_id(db: AsyncSession, id: UUID) -> models.User:
+    stmt = select(models.User).where(models.User.id == id)
+    result = await db.execute(stmt)
+    return result.scalar()
+
+
+async def create_user(db: AsyncSession, user: schemas.UserCreate) -> models.User:
+    hashed_password = utils.get_hashed_password(user.password)
+    user = models.User(
+        **user.model_dump(exclude={"password"}), password=hashed_password
+    )
+    db.add(user)
+    await db.commit()
+    await db.refresh(user)
+
+    return user

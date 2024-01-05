@@ -145,3 +145,29 @@ async def create_message(
     messages[1].content = utils.jsonify(messages[1].content)
 
     return schemas.Message.model_validate(messages[1])
+
+
+@router.get("/user/me", response_model=schemas.User)
+async def read_users_me(
+    current_user: Annotated[schemas.User, Depends(auth.get_current_active_user)]
+) -> schemas.User:
+    return current_user
+
+
+@router.get("/user/{id}", response_model=schemas.User)
+async def get_user(id: ID, db: AsyncDB) -> schemas.User:
+    user = await crud.get_user_by_id(db=db, id=id)
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
+
+    return schemas.User.model_validate(user)
+
+
+@router.post("/user", response_model=schemas.User)
+async def create_user(user: schemas.UserCreate, db: AsyncDB) -> schemas.User:
+    user = await crud.create_user(db=db, user=user)
+
+    return schemas.User.model_validate(user)
