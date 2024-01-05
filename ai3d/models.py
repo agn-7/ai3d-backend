@@ -65,3 +65,17 @@ class Message(Base):
     interaction_id = Column(String, ForeignKey("interaction.id"))
 
     interaction = relationship("Interaction", back_populates="messages")
+
+
+class User(Base):
+    username = Column(String, unique=True, index=True)
+    full_name = Column(String)
+    email = Column(String, unique=True, index=True)
+    password = Column(String)
+    disabled = Column(Boolean, default=False)
+
+    def __repr__(self):
+        return (
+            f"<User(username='{self.username}', full_name='{self.full_name}', "
+            f"email='{self.email}', disabled={self.disabled})>"
+        )

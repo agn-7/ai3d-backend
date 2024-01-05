@@ -46,3 +46,23 @@ class Interaction(InteractionCreate):
     created_at: datetime
     updated_at: datetime
     messages: List[Message] = []
+
+class User(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    username: str
+    email: str | None = None
+    full_name: str | None = None
+    disabled: bool | None = False
+
+
+class UserInDB(User):
+    model_config = ConfigDict(from_attributes=True)
+
+    password: str
+
+
+class UserCreate(User):
+    model_config = ConfigDict(from_attributes=True)
+
+    password: str
