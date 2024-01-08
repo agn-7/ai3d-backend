@@ -87,5 +87,5 @@ async def test_create_user(db: AsyncSession):
     user_schema = schemas.UserCreate(username="user1", password="password1")
 
     response = client.client.post("/api/user", json=user_schema.model_dump())
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json()["username"] == "user1"
