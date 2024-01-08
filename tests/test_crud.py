@@ -1,14 +1,14 @@
 import pytest
 
 from ai3d import crud, models, schemas
-from . import client
+from ai3d.database import AsyncSession
 
 
 ### Unit Tests ###
 
 
 @pytest.mark.asyncio
-async def test_get_interactions(db):
+async def test_get_interactions(db: AsyncSession):
     interaction1 = models.Interaction(
         settings=dict(model="model1", role="role1", prompt="prompt1"),
     )
@@ -26,7 +26,7 @@ async def test_get_interactions(db):
 
 
 @pytest.mark.asyncio
-async def test_get_interaction(db):
+async def test_get_interaction(db: AsyncSession):
     interaction = models.Interaction(
         settings=dict(model="model", role="role", prompt="prompt"),
     )
@@ -36,3 +36,32 @@ async def test_get_interaction(db):
     retrieved_interaction = await crud.get_interaction(db, interaction.id)
     assert retrieved_interaction.id == interaction.id
     assert retrieved_interaction.settings["model"] == "model"
+
+
+@pytest.mark.asyncio
+async def test_get_user(db: AsyncSession):
+    user1 = models.User(username="user1", password="password1")
+    db.add(user1)
+    await db.commit()
+
+    user = await crud.get_user(db, "user1")
+    assert user.username == "user1"
+
+
+@pytest.mark.asyncio
+async def test_get_user_by_id(db: AsyncSession):
+    user1 = models.User(username="user1", password="password1")
+    db.add(user1)
+    await db.commit()
+
+    user = await crud.get_user_by_id(db, user1.id)
+    assert user.id == user1.id
+
+
+@pytest.mark.asyncio
+async def test_create_user(db: AsyncSession):
+    user_schema = schemas.UserCreate(username="user1", password="password1")
+    user = await crud.create_user(db, user_schema)
+
+    assert user.username == "user1"
+    assert user.password == "hashedpassword1"
