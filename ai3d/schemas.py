@@ -46,3 +46,35 @@ class Interaction(InteractionCreate):
     created_at: datetime
     updated_at: datetime
     messages: List[Message] = []
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None
+
+
+class UserBase(BaseModel):
+    username: str
+    email: str | None = None
+    full_name: str | None = None
+    disabled: bool | None = False
+
+
+class UserCreate(UserBase):
+    password: str  # plain password
+
+
+class User(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+
+
+class UserInDB(User):
+    model_config = ConfigDict(from_attributes=True)
+
+    password: str  # hashed password

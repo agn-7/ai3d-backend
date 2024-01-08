@@ -4,6 +4,10 @@ import json
 from datetime import datetime
 from uuid import UUID
 
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 def convert_timezone(dt: datetime, tz: str = "Europe/Berlin") -> datetime:
     """Converts a datetime object to the specified timezone — naive -> aware
@@ -101,3 +105,7 @@ async def interaction_id_to_str(interaction_id: UUID) -> str:
         The converted UUID
     """
     return str(interaction_id)
+
+
+def get_hashed_password(password: str) -> str:
+    return pwd_context.hash(password)
