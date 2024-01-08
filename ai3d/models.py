@@ -4,6 +4,7 @@ from sqlalchemy import Column, DateTime, Integer, String, Boolean, ForeignKey, J
 from sqlalchemy.orm import as_declarative, declared_attr, relationship
 from sqlalchemy.dialects.postgresql import UUID
 
+
 from . import utils
 
 
@@ -73,9 +74,10 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     password = Column(String)
     disabled = Column(Boolean, default=False)
+    role = Column(String, default="user", server_default="user")
 
     def __repr__(self):
         return (
             f"<User(username='{self.username}', full_name='{self.full_name}', "
-            f"email='{self.email}', disabled={self.disabled})>"
+            f"email='{self.email}', disabled={self.disabled}, role='{self.role}')>"
         )
