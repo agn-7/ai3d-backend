@@ -1,5 +1,7 @@
 import pytest_asyncio
 
+from contextlib import contextmanager
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import client
@@ -12,3 +14,19 @@ async def db() -> AsyncSession:
         await client.create_tables()
         yield session
         await client.drop_tables()
+
+
+@pytest_asyncio.fixture()
+@contextmanager
+def mock_get_hashed_password():
+    original_get_hashed_password = utils.get_hashed_password
+    try:
+        # Mocking utils.get_hashed_password function
+        def mock_get_hashed_password(password: str) -> str:
+            return "hashed" + password
+
+        utils.get_hashed_password = mock_get_hashed_password
+        yield
+    finally:
+        # Unmocking the original function
+        utils.get_hashed_password = original_get_hashed_password

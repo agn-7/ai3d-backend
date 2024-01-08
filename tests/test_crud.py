@@ -1,6 +1,6 @@
 import pytest
 
-from ai3d import crud, models, schemas, utils
+from ai3d import crud, models, schemas
 from ai3d.database import AsyncSession
 
 
@@ -59,23 +59,10 @@ async def test_get_user_by_id(db: AsyncSession):
 
 
 @pytest.mark.asyncio
-async def test_create_user(db: AsyncSession):
-    try:
-        # Mocking utils.get_hashed_password function
-        def mock_get_hashed_password(password: str) -> str:
-            return "hashed" + password
-
-        get_hashed_password = utils.get_hashed_password
-        utils.get_hashed_password = mock_get_hashed_password
-
+async def test_create_user(db: AsyncSession, mock_get_hashed_password):
+    with mock_get_hashed_password:
         user_schema = schemas.UserCreate(username="user1", password="password1")
         user = await crud.create_user(db, user_schema)
 
         assert user.username == "user1"
         assert user.password == "hashedpassword1"
-    finally:
-        # Unmocking utils.get_hashed_password function
-        utils.get_hashed_password = get_hashed_password
-
-    assert user.username == "user1"
-    assert user.password == "hashedpassword1"
