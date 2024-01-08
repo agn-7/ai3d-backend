@@ -68,10 +68,15 @@ class UserCreate(UserBase):
     password: str  # plain password
 
 
+class UserAdminCreate(UserCreate):
+    role: Literal["admin"] = "admin"
+
+
 class User(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
+    role: Literal["user", "admin"]
 
 
 class UserInDB(User):

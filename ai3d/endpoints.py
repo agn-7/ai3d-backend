@@ -187,8 +187,28 @@ async def get_user(id: ID, db: AsyncDB) -> schemas.User:
     return schemas.User.model_validate(user)
 
 
-@router.post("/user", response_model=schemas.User)
+@router.post("/user", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
 async def create_user(user: schemas.UserCreate, db: AsyncDB) -> schemas.User:
+    user = await crud.create_user(db=db, user=user)
+
+    return schemas.User.model_validate(user)
+
+
+@router.post(
+    "/superuser",
+    response_model=schemas.User,
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_superuser(
+    user: schemas.UserAdminCreate,
+    db: AsyncDB,
+    current_user: Annotated[schemas.User, Depends(auth.get_current_active_user)],
+) -> schemas.User:
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Permission denied"
+        )
+
     user = await crud.create_user(db=db, user=user)
 
     return schemas.User.model_validate(user)
