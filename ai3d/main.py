@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqladmin import Admin
 
 from .endpoints import router
+from .database import engine
+from .admins import UserAdmin, InteractionAdmin
 
 
 def create_app() -> FastAPI:
@@ -23,3 +26,6 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
+admin = Admin(app, engine)
+admin.add_view(UserAdmin)
+admin.add_view(InteractionAdmin)
