@@ -11,6 +11,8 @@ class UserAdmin(ModelView, model=models.User):
         models.User.username,
     ]
 
+    can_delete = False
+
 
 class InteractionAdmin(ModelView, model=models.Interaction):
     column_list = [
