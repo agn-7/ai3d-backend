@@ -4,7 +4,8 @@ from sqladmin import Admin
 
 from .endpoints import router
 from .database import engine
-from .admins import UserAdmin, InteractionAdmin
+from .admins import UserAdmin, InteractionAdmin, AdminAuth
+from .auth import SECRET_KEY
 
 
 def create_app() -> FastAPI:
@@ -26,6 +27,8 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-admin = Admin(app, engine)
+
+authentication_backend = AdminAuth(secret_key=SECRET_KEY)
+admin = Admin(app=app, engine=engine, authentication_backend=authentication_backend)
 admin.add_view(UserAdmin)
 admin.add_view(InteractionAdmin)
