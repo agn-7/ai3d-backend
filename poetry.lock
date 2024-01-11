@@ -2741,10 +2741,8 @@ version = "0.16.0"
 description = "SQLAlchemy admin for FastAPI and Starlette"
 optional = false
 python-versions = ">=3.8"
-files = [
-    {file = "sqladmin-0.16.0-py3-none-any.whl", hash = "sha256:57aa3347a81348685938b16d6aa8ac9cd72f29fcf0f7516e834a00ea8b45462b"},
-    {file = "sqladmin-0.16.0.tar.gz", hash = "sha256:1b3e2062cf19adcd70a46edda30674d8a8e94f3bc6e008befc9037195e00785b"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 jinja2 = "*"
@@ -2755,6 +2753,12 @@ wtforms = ">=3.1,<3.2"
 
 [package.extras]
 full = ["itsdangerous"]
+
+[package.source]
+type = "git"
+url = "https://github.com/agn-7/sqladmin.git"
+reference = "HEAD"
+resolved_reference = "b2f9432e2390c0fbfe67c5274dce88141efcad94"
 
 [[package]]
 name = "sqlalchemy"
@@ -3252,4 +3256,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "596662eca5287131ecaaaf70495facde87cc8cf87f9b156b6422793cda1d567c"
+content-hash = "4f3152a36f55de99d0ab119b818a7c0d03422893655588d2a14432eb6200dc2a"
