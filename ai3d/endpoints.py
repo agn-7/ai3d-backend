@@ -13,6 +13,7 @@ router = APIRouter()
 ID = Annotated[UUID, Depends(utils.uuid_to_str)]
 InteractionID = Annotated[UUID, Depends(utils.interaction_id_to_str)]
 AsyncDB = Annotated[AsyncSession, Depends(get_db)]
+User = Annotated[schemas.User, Depends(auth.get_current_active_user)]
 
 
 @router.get("/", response_model=str)
@@ -63,11 +64,15 @@ async def get_interactions(id: ID, db: AsyncDB) -> schemas.Interaction:
     return schemas.Interaction.model_validate(interaction)
 
 
-@router.post("/interactions", response_model=schemas.Interaction)
+@router.post(
+    "/interactions",
+    response_model=schemas.Interaction,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_interactions(
     instruction: schemas.Instruction,
     db: AsyncDB,
-    user: Annotated[schemas.User, Depends(auth.get_current_active_user)],
+    user: User,
     chat_model: schemas.ChatModel = Depends(),
 ) -> schemas.Interaction:
     settings = schemas.Settings(
@@ -90,6 +95,7 @@ async def update_interaction(
     id: ID,
     instruction: schemas.Instruction,
     db: AsyncDB,
+    user: User,
     chat_model: schemas.ChatModel = Depends(),
 ) -> schemas.Interaction:
     settings = schemas.Settings(
@@ -111,6 +117,7 @@ async def update_interaction(
 async def get_all_message_in_interaction(
     interaction_id: InteractionID,
     db: AsyncDB,
+    user: User,
     page: Optional[int] = None,
     per_page: Optional[int] = None,
 ) -> List[schemas.Message]:
@@ -188,7 +195,9 @@ async def get_user(id: ID, db: AsyncDB) -> schemas.User:
 
 
 @router.post("/user", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
-async def create_user(user: schemas.UserCreate, db: AsyncDB) -> schemas.User:
+async def create_user(
+    user: schemas.UserCreate, db: AsyncDB, current_user: User
+) -> schemas.User:
     user = await crud.create_user(db=db, user=user)
 
     return schemas.User.model_validate(user)
