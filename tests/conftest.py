@@ -1,6 +1,7 @@
 import pytest_asyncio
 
 from contextlib import contextmanager
+from unittest.mock import patch
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,3 +31,10 @@ def mock_get_hashed_password():
     finally:
         # Unmocking the original function
         utils.get_hashed_password = original_get_hashed_password
+
+
+@pytest_asyncio.fixture
+def mock_generate_ai_response():
+    with patch("ai3d.modules.generate_ai_response") as mock:
+        mock.return_value = "AI response"
+        yield mock
