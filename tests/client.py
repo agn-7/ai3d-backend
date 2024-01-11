@@ -1,3 +1,4 @@
+from typing import AsyncGenerator
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncEngine
@@ -23,7 +24,7 @@ async def drop_tables():
         await conn.run_sync(models.Base.metadata.drop_all)
 
 
-async def override_get_db() -> AsyncSession:
+async def override_get_db() -> AsyncGenerator:
     async with async_session() as session:
         yield session
 
