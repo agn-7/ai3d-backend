@@ -2,21 +2,28 @@ import asyncclick as click
 import inspect
 
 from getpass import getpass
+from typing import Callable, TypeVar, Generic, AsyncGenerator
 
 from . import crud, schemas, database
+
+T = TypeVar('T')
+
+
+class Provider(Generic[T]):
+    def __init__(self, factory: Callable[..., AsyncGenerator[T, None]]):
+        self.factory = factory
 
 
 def inject_db(f):
     async def wrapped(*args, **kwargs):
-        # Get the default parameter values
         sig = inspect.signature(f)
         bound_args = sig.bind_partial(*args, **kwargs)
         bound_args.apply_defaults()
 
-        # Process all arguments for async generators
-        for name, value in bound_args.arguments.items():
-            if inspect.isasyncgen(value):
-                async for item in value:
+        for name, param in sig.parameters.items():
+            if isinstance(bound_args.arguments[name], Provider):
+                gen = bound_args.arguments[name].factory()
+                async for item in gen:
                     bound_args.arguments[name] = item
                     await f(*bound_args.args, **bound_args.kwargs)
 
@@ -30,7 +37,7 @@ def cli():
 
 @cli.command(name="create_superuser")
 @inject_db
-async def create_superuser(db: database.AsyncSession = database.get_db()):
+async def create_superuser(db: database.AsyncSession = Provider(database.get_db)):
     username = click.prompt("Username", type=str)
     email = click.prompt("Email (optional)", type=str, default="")
     password = getpass("Password: ")
