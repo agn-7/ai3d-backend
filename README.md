@@ -21,7 +21,12 @@ To launch an API instance, you should:
 
 You can also run the project via `docker-compose` (i.e. `docker compose up -d`) on port `80` in which you would need the [.docker.env](/.docker.env) containing the following variable to create the database:
 
-```
+```shell
 SQLALCHEMY_DATABASE_URI=postgresql+asyncpg://<username>:<password>@ai3d_db/<db-name>
 ```
 
+## Creating a superuser
+
+```shell
+poetry run python -m ai3d.commands create_superuser
+```
