@@ -25,13 +25,19 @@ def inject_db(f):
 
 
 @click.group()
-def cli():
+@click.pass_context
+async def cli(ctx):
     pass
 
 
 @cli.command(name="create_superuser")
+@click.pass_context
 @inject_db
-async def create_superuser(db: database.AsyncSession = Provide(database.get_db)):
+async def create_superuser(ctx, db: database.AsyncSession = Provide(database.get_db)):
+    if ctx.obj is not None:
+        """ctx comes from test"""
+        db = ctx.obj
+
     username = click.prompt("Username", type=str)
     email = click.prompt("Email (optional)", type=str, default="")
     password = getpass("Password: ")
