@@ -110,7 +110,9 @@ async def get_user_by_id(db: AsyncSession, id: UUID) -> models.User:
     return result.scalar()
 
 
-async def create_user(db: AsyncSession, user: schemas.UserCreate) -> models.User:
+async def create_user(
+    db: AsyncSession, user: schemas.UserCreate | schemas.UserAdminCreate
+) -> models.User:
     hashed_password = utils.get_hashed_password(user.password)
     user = models.User(
         **user.model_dump(exclude={"password"}), password=hashed_password

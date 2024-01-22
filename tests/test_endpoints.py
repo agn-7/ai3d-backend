@@ -210,6 +210,29 @@ async def test_create_user(db: AsyncSession):
 
 
 @pytest.mark.asyncio
+async def test_create_superuser(db: AsyncSession):
+    admin_user = schemas.UserAdminCreate(username="user1", password="password1")
+    await crud.create_user(db, admin_user)
+
+    login_response = client.client.post(
+        "/api/token",
+        data={"username": "user1", "password": "password1"},
+    )
+    token = login_response.json()["access_token"]
+
+    new_admin_user = schemas.UserAdminCreate(username="user2", password="password2")
+
+    response = client.client.post(
+        "/api/superuser",
+        json=new_admin_user.model_dump(),
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 201
+    assert response.json()["username"] == "user2"
+    assert response.json()["role"] == "admin"
+
+
+@pytest.mark.asyncio
 async def test_login(db: AsyncSession):
     user_schema = schemas.UserCreate(username="user1", password="password1")
     await crud.create_user(db, user_schema)
